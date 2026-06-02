@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Приглашение для Анастасии</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,500&family=Spectral:ital,wght@0,300;0,400;0,500;1,400&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --wine:#3c0a10; --wine-2:#5a0f18; --velvet:#6e1320;
+    --gold:#d8b46a; --gold-soft:#e7cf95; --cream:#f4ecdd; --ink:#2a070b;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{
+    font-family:'Spectral',Georgia,serif;
+    background:radial-gradient(120% 90% at 50% -10%, #7a1623 0%, var(--wine-2) 38%, var(--wine) 78%, #2a060b 100%);
+    color:var(--cream);min-height:100vh;overflow-x:hidden;position:relative;-webkit-font-smoothing:antialiased;
+  }
+  body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+    background-image:
+      radial-gradient(1px 1px at 20% 30%, rgba(232,207,149,.5), transparent),
+      radial-gradient(1px 1px at 70% 60%, rgba(232,207,149,.35), transparent),
+      radial-gradient(1.5px 1.5px at 40% 80%, rgba(232,207,149,.4), transparent),
+      radial-gradient(1px 1px at 85% 20%, rgba(232,207,149,.3), transparent),
+      radial-gradient(1px 1px at 10% 70%, rgba(232,207,149,.35), transparent);
+    opacity:.6;animation:twinkle 6s ease-in-out infinite alternate;}
+  @keyframes twinkle{from{opacity:.35}to{opacity:.75}}
+  body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:1;
+    box-shadow:inset 0 0 200px 60px rgba(20,3,6,.75);}
+  .curtain{position:fixed;top:0;bottom:0;width:52%;z-index:40;
+    background:repeating-linear-gradient(90deg,#7a1320 0px,#560b15 26px,#82182a 52px,#560b15 78px);
+    box-shadow:0 0 80px rgba(0,0,0,.6) inset;
+    transition:transform 1.6s cubic-bezier(.7,.02,.25,1);will-change:transform;}
+  .curtain.left{left:0;border-right:3px solid rgba(0,0,0,.3)}
+  .curtain.right{right:0;border-left:3px solid rgba(0,0,0,.3)}
+  .curtain::after{content:"";position:absolute;top:0;bottom:0;width:14px;
+    background:linear-gradient(var(--gold-soft),var(--gold),#9c7a32);}
+  .curtain.left::after{right:0}
+  .curtain.right::after{left:0}
+  .stage.open .curtain.left{transform:translateX(-101%)}
+  .stage.open .curtain.right{transform:translateX(101%)}
+  .wrap{position:relative;z-index:50;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:32px 20px;}
+  .card{width:100%;max-width:560px;text-align:center;animation:rise .9s cubic-bezier(.2,.8,.2,1) both;}
+  @keyframes rise{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:none}}
+  .kicker{font-size:.78rem;letter-spacing:.42em;text-transform:uppercase;color:var(--gold);margin-bottom:18px;font-weight:500;}
+  h1{font-family:'Fraunces',serif;font-weight:600;font-size:clamp(2.8rem,10vw,4.6rem);line-height:.98;letter-spacing:-.01em;color:var(--cream);text-shadow:0 2px 30px rgba(0,0,0,.4);}
+  h1 .name{display:block;font-style:italic;background:linear-gradient(var(--gold-soft),var(--gold));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;}
+  h2{font-family:'Fraunces',serif;font-weight:500;font-size:clamp(1.7rem,6vw,2.5rem);line-height:1.12;margin-bottom:8px;letter-spacing:-.01em;}
+  .panel{background:rgba(28,5,9,.74);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border:1px solid rgba(216,180,106,.4);border-radius:26px;padding:36px 30px 34px;box-shadow:0 30px 70px rgba(0,0,0,.5);}
+  .poem{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(1.18rem,4.4vw,1.42rem);line-height:1.75;color:#f3e8d2;margin:6px auto 26px;max-width:30ch;text-wrap:balance;}
+  .lead{font-size:1.08rem;font-weight:300;color:#ecdfc7;line-height:1.6;max-width:42ch;margin:0 auto 26px;}
+  .lead em{color:var(--gold-soft);font-style:italic}
+  .divider{width:60px;height:1px;margin:22px auto;background:linear-gradient(90deg,transparent,var(--gold),transparent);position:relative;}
+  .divider::after{content:"\2726";position:absolute;top:-11px;left:50%;transform:translateX(-50%);color:var(--gold);font-size:.8rem;}
+  .options{display:flex;flex-direction:column;gap:12px;margin-top:8px}
+  .options.scrollable{max-height:58vh;overflow-y:auto;padding:2px 6px 2px 2px}
+  .chips{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-bottom:14px}
+  .chip{cursor:pointer;border:1px solid rgba(216,180,106,.4);background:rgba(244,236,221,.05);color:var(--cream);font-family:'Spectral';padding:9px 14px;border-radius:40px;font-size:.95rem;transition:.2s}
+  .chip:hover,.chip.sel{background:rgba(216,180,106,.18);border-color:var(--gold)}
+  .dateInput{font-family:'Spectral';font-size:1rem;padding:12px 14px;border-radius:12px;border:1px solid rgba(216,180,106,.4);background:rgba(0,0,0,.22);color:var(--cream);width:100%;max-width:260px;color-scheme:dark}
+  .opt{width:100%;text-align:left;cursor:pointer;background:rgba(244,236,221,.04);
+    border:1px solid rgba(216,180,106,.35);border-radius:14px;padding:16px 18px;
+    color:var(--cream);font-family:'Spectral';font-size:1.05rem;transition:.28s ease;
+    display:flex;align-items:center;gap:14px;backdrop-filter:blur(2px);}
+  .opt .ic{font-size:1.35rem;line-height:1;filter:drop-shadow(0 1px 4px rgba(0,0,0,.4))}
+  .opt .txt b{display:block;font-family:'Fraunces';font-weight:600;font-size:1.12rem}
+  .opt .txt small{display:block;color:#d9c8a6;font-weight:300;font-size:.9rem;margin-top:2px}
+  .opt:hover{border-color:var(--gold);background:rgba(216,180,106,.12);transform:translateY(-2px);box-shadow:0 10px 30px rgba(0,0,0,.3);}
+  .opt:active{transform:translateY(0)}
+  .btn{cursor:pointer;border:none;font-family:'Fraunces',serif;font-size:1.15rem;font-weight:600;color:var(--ink);
+    background:linear-gradient(160deg,var(--gold-soft),var(--gold) 60%,#b8923f);padding:16px 40px;border-radius:50px;
+    box-shadow:0 10px 30px rgba(0,0,0,.35),0 0 0 1px rgba(255,255,255,.2) inset;transition:.25s ease;letter-spacing:.02em;}
+  .btn:hover{transform:translateY(-2px);box-shadow:0 16px 40px rgba(0,0,0,.45)}
+  .btn:active{transform:translateY(0)}
+  .btn.ghost{background:transparent;color:var(--gold-soft);border:1px solid rgba(216,180,106,.4);box-shadow:none;font-size:.95rem;padding:12px 26px;}
+  .btn.ghost:hover{background:rgba(216,180,106,.1)}
+  .progress{display:flex;gap:7px;justify-content:center;margin-bottom:26px;}
+  .dot{width:7px;height:7px;border-radius:50%;background:rgba(216,180,106,.28);transition:.3s}
+  .dot.on{background:var(--gold);transform:scale(1.25)}
+  #screen{transition:opacity .35s ease}
+  #screen.fade{opacity:0}
+  .summary{text-align:left;background:rgba(0,0,0,.18);border:1px solid rgba(216,180,106,.3);border-radius:18px;padding:20px 22px;margin:18px 0;}
+  .summary .row{display:flex;gap:12px;padding:11px 0;border-bottom:1px dashed rgba(216,180,106,.22)}
+  .summary .row:last-child{border-bottom:none}
+  .summary .row .ic{font-size:1.2rem}
+  .summary .row .k{font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);display:block;margin-bottom:1px}
+  .summary .row .v{font-family:'Fraunces';font-size:1.08rem;color:var(--cream)}
+  .copyArea{width:100%;border-radius:12px;border:1px solid rgba(216,180,106,.3);background:rgba(0,0,0,.25);color:#ecdfc7;font-family:'Spectral';padding:12px 14px;font-size:.95rem;resize:none;margin-top:6px;line-height:1.5;}
+  .hint{font-size:.82rem;color:#cdb98f;margin-top:10px;font-weight:300}
+  .petal{position:fixed;top:-30px;z-index:30;pointer-events:none;font-size:1.4rem;animation:fall linear forwards;opacity:.9}
+  @keyframes fall{to{transform:translateY(110vh) rotate(420deg);opacity:0}}
+  .stagger>*{opacity:0;animation:rise .7s cubic-bezier(.2,.8,.2,1) forwards}
+  .stagger>*:nth-child(1){animation-delay:.05s}
+  .stagger>*:nth-child(2){animation-delay:.15s}
+  .stagger>*:nth-child(3){animation-delay:.25s}
+  .stagger>*:nth-child(4){animation-delay:.35s}
+  .stagger>*:nth-child(5){animation-delay:.45s}
+  .stagger>*:nth-child(6){animation-delay:.55s}
+  @media (max-width:480px){
+    .wrap{padding:16px 12px;align-items:flex-start}
+    .panel{padding:26px 18px 28px;border-radius:20px}
+    .kicker{letter-spacing:.28em;font-size:.7rem;margin-bottom:14px}
+    h1{font-size:clamp(2.6rem,13vw,3.4rem)}
+    .poem{max-width:32ch;line-height:1.62;font-size:clamp(1.12rem,5vw,1.3rem);margin-bottom:22px}
+    .lead{font-size:1rem}
+    .opt{padding:14px 14px;font-size:1rem;gap:12px}
+    .opt .txt b{font-size:1.05rem}
+    .options.scrollable{max-height:62vh}
+    .btn{padding:15px 30px;font-size:1.08rem}
+    .summary{padding:18px 18px}
+    .dateInput{max-width:100%}
+  }
+  @media (max-height:720px) and (max-width:480px){
+    .wrap{padding:12px}
+    .panel{padding:22px 16px 24px}
+  }
+</style>
+</head>
+<body>
+  <div class="stage" id="stage">
+    <div class="curtain left"></div>
+    <div class="curtain right"></div>
+    <div class="wrap">
+      <div class="card" id="screen"></div>
+    </div>
+  </div>
+
+<script>
+/* =================== НАСТРОЙКИ (можешь поменять) =================== */
+const CONFIG = {
+  name: "Анастасия",
+  nameGen: "Анастасии",
+  plays: [
+    {ic:"\u{1FA70}", b:"Балет \u00ABЛебединое озеро\u00BB", s:"Балет \u00B7 Кремлёвский дворец"},
+    {ic:"\u{1FA70}", b:"Балет \u00ABСпартак\u00BB", s:"Балет \u00B7 большой масштаб"},
+    {ic:"\u{1F3B6}", b:"Мюзикл \u00ABНотр-Дам-де-Пари\u00BB", s:"Мюзикл \u00B7 Театр на Мельникова"},
+    {ic:"\u{1F3B6}", b:"Мюзикл \u00ABАнна Каренина\u00BB", s:"Мюзикл \u00B7 Театр оперетты"},
+    {ic:"\u{1F3B6}", b:"Мюзикл \u00ABВальс-бостон\u00BB", s:"Мюзикл \u00B7 Театр Эстрады"},
+    {ic:"\u{1F3B6}", b:"Мюзикл \u00ABНичего не бойся, я с тобой\u00BB", s:"Мюзикл \u00B7 МДМ"},
+    {ic:"\u{1F3B6}", b:"Мюзикл \u00ABВ джазе только девушки\u00BB", s:"Мюзикл \u00B7 на Вернадского"},
+    {ic:"\u{1F3AD}", b:"\u00ABОпус 48. Островский\u00BB", s:"Премьера \u00B7 Театр на Таганке"},
+    {ic:"\u{1F3AD}", b:"\u00ABФигаро\u00BB", s:"Комедия \u00B7 Театр на Таганке"},
+    {ic:"\u{1F49E}", b:"\u00ABБезымянная звезда\u00BB", s:"Романтичная драма \u00B7 рейтинг 9.9"},
+    {ic:"\u{1F33C}", b:"\u00ABЦветы для Элджернона\u00BB", s:"Драма \u00B7 РАМТ"},
+    {ic:"\u{1F3A9}", b:"\u00ABОскар Уайльд. Смешно о серьёзном\u00BB", s:"Комедия \u00B7 рейтинг 9.9"},
+    {ic:"\u{1F604}", b:"\u00ABНе спорьте с женщиной!\u00BB", s:"Комедия \u00B7 Сцена Мира"},
+    {ic:"\u{1F604}", b:"\u00ABПодруги\u00BB", s:"Комедия \u00B7 Центральный дом актёра"},
+    {ic:"\u{1F604}", b:"\u00ABДруг на час\u00BB", s:"Комедия \u00B7 Центральный дом актёра"},
+    {ic:"\u{1F604}", b:"\u00ABДикарь\u00BB", s:"Комедия \u00B7 Дом Высоцкого"},
+    {ic:"\u{1F4D6}", b:"\u00ABТри товарища\u00BB", s:"Драма \u00B7 Современник"},
+    {ic:"\u{1F4D6}", b:"\u00ABПоминальная молитва\u00BB", s:"Драма \u00B7 МОСТ"},
+    {ic:"\u{1F4D6}", b:"\u00ABВишнёвый сад\u00BB", s:"Премьера \u00B7 театр Модерн"},
+    {ic:"\u{1F451}", b:"\u00ABРичард III\u00BB", s:"Драма \u00B7 Театр им. Вахтангова"},
+    {ic:"\u{1F3BC}", b:"Опера \u00ABЮнона и Авось\u00BB", s:"Рок-опера о любви \u00B7 Ленком"},
+    {ic:"\u{1F3AD}", b:"\u00ABТот самый №13\u00BB", s:"Комедия \u00B7 Современник"},
+    {ic:"\u{1F300}", b:"\u00ABВернувшиеся: Новая реальность\u00BB", s:"Иммерсивный \u00B7 особняк \u00ABДашков, 5\u00BB"},
+    {ic:"\u{1F3B2}", b:"Сделай мне сюрприз", s:"Доверяю твоему вкусу"},
+  ],
+  outfits: [
+    {ic:"\u{1F31F}", b:"Что-то нарядное", s:"Повод наконец надеть то самое платье"},
+    {ic:"\u{1F9E5}", b:"Элегантно, но удобно", s:"Smart casual — стильно и без напряга"},
+    {ic:"\u{1F3A8}", b:"Что-то яркое", s:"Хочу, чтобы было настроение"},
+  ],
+  afters: [
+    {ic:"\u{1F370}", b:"Десерт и вино", s:"Уютное место, чтобы посидеть и поболтать"},
+    {ic:"\u{1F303}", b:"Прогулка по вечернему городу", s:"Никуда не спешить"},
+    {ic:"\u{1F35D}", b:"Поздний ужин", s:"Если проголодаемся после спектакля"},
+    {ic:"\u{1F378}", b:"Уютный бар", s:"Атмосферно и негромко"},
+  ],
+  pickups: [
+    {ic:"\u{1F697}", b:"Заезжай за мной", s:"Забери меня из дома"},
+    {ic:"\u{1F3AB}", b:"Встретимся у театра", s:"Подойду сама к началу"},
+    {ic:"\u2615", b:"Сначала кофе рядом", s:"Встретимся пораньше неподалёку"},
+  ],
+};
+
+/* =================== ЛОГИКА =================== */
+const S = document.getElementById('screen');
+const stage = document.getElementById('stage');
+const total = 7;
+const answers = {play:null, date:null, time:null, outfit:null, after:null, pickup:null, address:''};
+let dodged = 0;
+
+/* помощники для дат */
+const RU_MONTHS=['января','февраля','марта','апреля','мая','июня','июля','августа','сентября','октября','ноября','декабря'];
+const RU_DAYS=['вс','пн','вт','ср','чт','пт','сб'];
+function isoLocal(d){ return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); }
+function todayStr(){ return isoLocal(new Date()); }
+function parseLocal(s){ const p=s.split('-'); return new Date(+p[0],+p[1]-1,+p[2]); }
+function fmtFull(d){ return RU_DAYS[d.getDay()]+', '+d.getDate()+' '+RU_MONTHS[d.getMonth()]; }
+
+function fade(render){
+  S.classList.add('fade');
+  setTimeout(function(){ render(); S.classList.remove('fade'); window.scrollTo(0,0); }, 320);
+}
+function dots(active){
+  let h='<div class="progress">';
+  for(let i=0;i<total;i++) h+='<span class="dot '+(i<=active?'on':'')+'"></span>';
+  return h+'</div>';
+}
+function optionsHTML(arr, key, extra){
+  return '<div class="options stagger '+(extra||'')+'">'+arr.map(function(o,i){
+    return '<button class="opt" data-choose="'+key+'" data-i="'+i+'">'
+      +'<span class="ic">'+o.ic+'</span>'
+      +'<span class="txt"><b>'+o.b+'</b><small>'+o.s+'</small></span></button>';
+  }).join('')+'</div>';
+}
+
+function intro(){
+  S.innerHTML =
+    '<div class="panel">'
+    +'<div class="kicker">Личное приглашение</div>'
+    +'<h1>Театр<span class="name">для '+(CONFIG.nameGen||CONFIG.name)+'</span></h1>'
+    +'<div class="divider"></div>'
+    +'<p class="poem">'
+    +'Настя, позволь мне сегодня посметь<br>'
+    +'позвать тебя в свет, в позолоту и медь —<br>'
+    +'туда, где над сценой струятся вечера,<br>'
+    +'где бархат, и музыка, и мишура.<br><br>'
+    +'Пусть занавес дрогнет, откроется зал,<br>'
+    +'и вечер начнётся, что я загадал.<br>'
+    +'Ты выберешь всё — и спектакль, и час…<br>'
+    +'Готова? Тогда — поднимаем — за нас.'
+    +'</p>'
+    +'<button class="btn" data-action="start">Поднять занавес</button>'
+    +'</div>';
+}
+function start(){ stage.classList.add('open'); setTimeout(function(){ fade(q1); }, 700); }
+
+function q1(){ S.innerHTML = dots(0)+'<div class="kicker">Акт первый \u00B7 Сцена</div><h2>Что посмотрим со сцены?</h2><p class="lead">Выбери, что тебе ближе сегодня.</p>'+optionsHTML(CONFIG.plays,'play','scrollable'); }
+function qDate(){
+  S.innerHTML = dots(1)
+    +'<div class="kicker">Антракт \u00B7 Дата</div>'
+    +'<h2>Когда тебе удобно?</h2>'
+    +'<p class="lead">Нажми на удобный вечер или открой календарь.</p>'
+    +'<div id="chips" class="chips"></div>'
+    +'<input type="date" id="dateInput" class="dateInput" min="'+todayStr()+'">'
+    +'<div style="margin-top:18px"><button class="btn" data-action="dateNext">Дальше</button></div>'
+    +'<p class="hint">Если пока не уверена — просто нажми «Дальше», решим вместе.</p>';
+  renderChips();
+  if(answers.date && answers.date.iso){ const inp=document.getElementById('dateInput'); if(inp) inp.value=answers.date.iso; }
+}
+function renderChips(){
+  const c=document.getElementById('chips'); if(!c) return;
+  const today=new Date(); today.setHours(0,0,0,0);
+  const picks=[]; let d=new Date(today);
+  while(picks.length<4){
+    d=new Date(d.getTime()+86400000);
+    if(d.getDay()===5||d.getDay()===6) picks.push(new Date(d));
+  }
+  c.innerHTML=picks.map(function(p){
+    return '<button class="chip" data-action="pickDate" data-date="'+isoLocal(p)+'">'+fmtFull(p)+'</button>';
+  }).join('');
+}
+function qTime(){
+  S.innerHTML = dots(2)
+    +'<div class="kicker">Антракт \u00B7 Время</div>'
+    +'<h2>К которому часу?</h2>'
+    +'<p class="lead">Скажи, в каком часу распахнётся зал.</p>'
+    +'<div id="chips" class="chips">'
+      +['18:00','19:00','19:30','20:00'].map(function(t){ return '<button class="chip" data-action="pickTime" data-time="'+t+'">'+t+'</button>'; }).join('')
+    +'</div>'
+    +'<input type="time" id="timeInput" class="dateInput" value="'+(answers.time||'19:00')+'">'
+    +'<div style="margin-top:18px"><button class="btn" data-action="timeNext">Дальше</button></div>'
+    +'<p class="hint">Выбери готовое время или укажи своё.</p>';
+}
+function q2(){ S.innerHTML = dots(3)+'<div class="kicker">Акт второй \u00B7 Образ</div><h2>В чём тебе хочется прийти?</h2><p class="lead">Каким тебе быть в этот вечер?</p>'+optionsHTML(CONFIG.outfits,'outfit'); }
+function q3(){ S.innerHTML = dots(4)+'<div class="kicker">Акт третий \u00B7 После</div><h2>Куда пойдём после спектакля?</h2><p class="lead">Куда нас с тобой унесёт этот вечер?</p>'+optionsHTML(CONFIG.afters,'after'); }
+function q4(){ S.innerHTML = dots(5)+'<div class="kicker">Акт четвёртый \u00B7 Начало</div><h2>Как начнём вечер?</h2><p class="lead">С чего мы начнём этот вечер вдвоём?</p>'+optionsHTML(CONFIG.pickups,'pickup'); }
+
+function finalQuestion(){
+  S.innerHTML = dots(6)
+    +'<div class="kicker">Кульминация</div>'
+    +'<h2>И главный вопрос\u2026</h2>'
+    +'<p class="lead">Анастасия, пойдёшь со мной на это свидание?</p>'
+    +'<div class="options" style="margin-top:18px">'
+    +'<button class="btn" data-action="yes" style="width:100%">Да, с удовольствием \u2726</button>'
+    +'<button class="btn ghost" id="maybe" data-action="dodge">Дай подумать\u2026</button>'
+    +'</div>';
+  const m=document.getElementById('maybe');
+  if(m) m.addEventListener('mouseover', dodge);
+}
+function dodge(){
+  const m=document.getElementById('maybe'); if(!m) return;
+  const phr=["А точно подумать? \u{1F642}","Подумай ещё разок\u2026","Кнопка \u00ABнет\u00BB куда-то делась \u{1F648}"];
+  if(dodged<3){ m.textContent=phr[dodged]; dodged++; }
+  if(dodged>=3){ m.style.transition=".4s"; m.style.opacity="0"; setTimeout(function(){ if(m) m.remove(); },400); }
+}
+
+function choose(key,i){
+  const map={play:'plays',outfit:'outfits',after:'afters',pickup:'pickups'};
+  answers[key] = CONFIG[map[key]][i];
+  if(key==='pickup'){
+    if(i===0){ fade(qAddress); } else { answers.address=''; fade(finalQuestion); }
+    return;
+  }
+  fade({play:qDate, outfit:q3, after:q4}[key]);
+}
+function qAddress(){
+  S.innerHTML = dots(5)
+    +'<div class="kicker">Последний штрих</div>'
+    +'<h2>Куда за тобой заехать?</h2>'
+    +'<p class="lead">Введи свой адрес — я подъеду к назначенному часу.</p>'
+    +'<input type="text" id="addrInput" class="dateInput" style="max-width:340px" placeholder="Введите свой адрес" autocomplete="off">'
+    +'<div style="margin-top:18px"><button class="btn" data-action="addrNext">Дальше</button></div>'
+    +'<p class="hint">Адрес увидим только ты и я — он попадёт в финальное сообщение.</p>';
+  if(answers.address){ const inp=document.getElementById('addrInput'); if(inp) inp.value=answers.address; }
+}
+function addrNext(){
+  const inp=document.getElementById('addrInput');
+  answers.address = inp&&inp.value ? inp.value.trim() : '';
+  fade(finalQuestion);
+}
+
+function pickDate(el){
+  const iso=el.getAttribute('data-date');
+  const inp=document.getElementById('dateInput'); if(inp) inp.value=iso;
+  document.querySelectorAll('.chip').forEach(function(c){ c.classList.remove('sel'); });
+  el.classList.add('sel');
+}
+function dateNext(){
+  const inp=document.getElementById('dateInput');
+  const v=inp&&inp.value ? inp.value : null;
+  if(v){ answers.date={iso:v, label:fmtFull(parseLocal(v))}; }
+  else { answers.date={iso:null, label:'решим вместе'}; }
+  fade(qTime);
+}
+function pickTime(el){
+  const t=el.getAttribute('data-time');
+  const inp=document.getElementById('timeInput'); if(inp) inp.value=t;
+  document.querySelectorAll('.chip').forEach(function(c){ c.classList.remove('sel'); });
+  el.classList.add('sel');
+}
+function timeNext(){
+  const inp=document.getElementById('timeInput');
+  answers.time = inp&&inp.value ? inp.value : null;
+  fade(q2);
+}
+
+function yes(){
+  petals();
+  fade(function(){
+    const a=answers;
+    const whenStr = (a.date ? a.date.label : '\u2014') + (a.time ? (', ' + a.time) : '');
+    const pickupStr = a.pickup.b + (a.address ? (' \u2014 ' + a.address) : '');
+    const text = 'Я сказала ДА \u{1F49B} Вот наш вечер:\n\u{1F3AD} Спектакль: '+a.play.b
+      +'\n\u{1F4C5} Когда: '+whenStr
+      +'\n\u{1F457} Образ: '+a.outfit.b+'\n\u2728 После: '+a.after.b+'\n\u{1F4CD} Встреча: '+pickupStr;
+    S.innerHTML =
+      '<div class="kicker">Браво!</div>'
+      +'<h2>Значит — да \u{1F49B}</h2>'
+      +'<p class="lead">Вот каким ты выбрала наш вечер. Отправь мне это, и я всё устрою.</p>'
+      +'<div class="summary stagger">'
+      +'<div class="row"><span class="ic">\u{1F3AD}</span><span><span class="k">Спектакль</span><span class="v">'+a.play.b+'</span></span></div>'
+      +'<div class="row"><span class="ic">\u{1F4C5}</span><span><span class="k">Когда</span><span class="v">'+whenStr+'</span></span></div>'
+      +'<div class="row"><span class="ic">\u{1F457}</span><span><span class="k">Образ</span><span class="v">'+a.outfit.b+'</span></span></div>'
+      +'<div class="row"><span class="ic">\u2728</span><span><span class="k">После</span><span class="v">'+a.after.b+'</span></span></div>'
+      +'<div class="row"><span class="ic">\u{1F4CD}</span><span><span class="k">Встреча</span><span class="v">'+pickupStr+'</span></span></div>'
+      +'</div>'
+      +'<textarea class="copyArea" id="ta" rows="6" readonly>'+text+'</textarea>'
+      +'<p class="hint" id="hint">Нажми кнопку, чтобы скопировать, и пришли мне \u2191</p>'
+      +'<div style="margin-top:14px"><button class="btn" data-action="copy">Скопировать и отправить</button></div>';
+  });
+}
+
+function copyText(){
+  const ta=document.getElementById('ta'); if(!ta) return;
+  ta.focus(); ta.select(); ta.setSelectionRange(0,99999);
+  const done=function(){ const h=document.getElementById('hint'); if(h) h.textContent='Скопировано \u2713 Теперь вставь в сообщение и пришли \u{1F48C}'; };
+  try{
+    if(navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(ta.value).then(done, function(){ try{document.execCommand('copy');}catch(e){} done(); });
+    } else { try{document.execCommand('copy');}catch(e){} done(); }
+  }catch(e){ try{document.execCommand('copy');}catch(_){} done(); }
+}
+
+function petals(){
+  const set=['\u{1F339}','\u2726','\u{1F49B}','\u{1F338}'];
+  for(let i=0;i<28;i++){
+    const p=document.createElement('div');
+    p.className='petal'; p.textContent=set[i%set.length];
+    p.style.left=(Math.random()*100)+'vw';
+    p.style.animationDuration=(3+Math.random()*3)+'s';
+    p.style.animationDelay=(Math.random()*1.2)+'s';
+    p.style.fontSize=(0.9+Math.random()*1.3)+'rem';
+    document.body.appendChild(p);
+    setTimeout(function(){ if(p) p.remove(); },7000);
+  }
+}
+
+/* Делегирование событий — работает в песочнице артефактов */
+document.addEventListener('click', function(e){
+  const opt = e.target.closest('[data-choose]');
+  if(opt){ choose(opt.getAttribute('data-choose'), parseInt(opt.getAttribute('data-i'),10)); return; }
+  const act = e.target.closest('[data-action]');
+  if(!act) return;
+  const a = act.getAttribute('data-action');
+  if(a==='start') start();
+  else if(a==='yes') yes();
+  else if(a==='dodge') dodge();
+  else if(a==='copy') copyText();
+  else if(a==='dateNext') dateNext();
+  else if(a==='pickDate') pickDate(act);
+  else if(a==='timeNext') timeNext();
+  else if(a==='pickTime') pickTime(act);
+  else if(a==='addrNext') addrNext();
+});
+
+intro();
+</script>
+</body>
+</html>
