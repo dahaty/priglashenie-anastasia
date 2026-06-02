@@ -91,6 +91,10 @@
   .copyArea{width:100%;border-radius:12px;border:1px solid rgba(216,180,106,.3);background:rgba(0,0,0,.25);color:#ecdfc7;font-family:'Spectral';padding:12px 14px;font-size:.95rem;resize:none;margin-top:6px;line-height:1.5;}
   .hint{font-size:.82rem;color:#cdb98f;margin-top:10px;font-weight:300}
   .epi-author{font-family:'Cormorant Garamond',serif;font-style:italic;color:var(--gold-soft);font-size:1rem;letter-spacing:.04em;opacity:.92;margin:-14px auto 26px;}
+  .sndBtn{position:fixed;top:14px;right:14px;z-index:60;width:44px;height:44px;border-radius:50%;border:1px solid rgba(216,180,106,.5);background:rgba(28,5,9,.55);color:var(--gold-soft);font-size:1.15rem;line-height:1;cursor:pointer;backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);display:flex;align-items:center;justify-content:center;transition:.2s;box-shadow:0 6px 18px rgba(0,0,0,.4)}
+  .sndBtn:hover{background:rgba(216,180,106,.18);border-color:var(--gold)}
+  .sndBtn.pulse{animation:sndpulse 2s ease-in-out infinite}
+  @keyframes sndpulse{0%,100%{box-shadow:0 0 0 0 rgba(216,180,106,.5)}50%{box-shadow:0 0 0 8px rgba(216,180,106,0)}}
   .lovephoto{width:100%;max-width:320px;aspect-ratio:1/1;object-fit:cover;border-radius:18px;margin:10px auto 6px;display:block;border:1px solid rgba(216,180,106,.7);box-shadow:0 16px 40px rgba(0,0,0,.55);}
   .loveline{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(1.2rem,5vw,1.5rem);line-height:1.5;color:#f3e8d2;max-width:26ch;margin:14px auto 20px;text-wrap:balance;}
   .petal{position:fixed;top:-30px;z-index:30;pointer-events:none;font-size:1.4rem;animation:fall linear forwards;opacity:.9}
@@ -129,6 +133,7 @@
     <div class="wrap">
       <div class="card" id="screen"></div>
     </div>
+    <button class="sndBtn pulse" id="sndBtn" data-action="sound" aria-label="Музыка" title="Музыка">♪</button>
   </div>
 
 <script>
@@ -225,7 +230,7 @@ function intro(){
     +'<button class="btn" data-action="start">Поднять занавес</button>'
     +'</div>';
 }
-function start(){ stage.classList.add('open'); setTimeout(function(){ fade(q1); }, 700); }
+function start(){ Snd.setOn(true); updateSndBtn(); Snd.swell(); stage.classList.add('open'); setTimeout(function(){ fade(q1); }, 700); }
 
 function q1(){ S.innerHTML = dots(0)+'<div class="kicker">Акт первый \u00B7 Сцена</div><h2>Что посмотрим со сцены?</h2><p class="lead">Выбери, что тебе ближе сегодня.</p>'+optionsHTML(CONFIG.plays,'play','scrollable'); }
 function qDate(){
@@ -288,6 +293,7 @@ function dodge(){
 }
 
 function choose(key,i){
+  Snd.pluck();
   const map={play:'plays',outfit:'outfits',after:'afters',pickup:'pickups'};
   answers[key] = CONFIG[map[key]][i];
   if(key==='pickup'){
@@ -313,6 +319,7 @@ function addrNext(){
 }
 
 function pickDate(el){
+  Snd.tick();
   const iso=el.getAttribute('data-date');
   const inp=document.getElementById('dateInput'); if(inp) inp.value=iso;
   document.querySelectorAll('.chip').forEach(function(c){ c.classList.remove('sel'); });
@@ -326,6 +333,7 @@ function dateNext(){
   fade(qTime);
 }
 function pickTime(el){
+  Snd.tick();
   const t=el.getAttribute('data-time');
   const inp=document.getElementById('timeInput'); if(inp) inp.value=t;
   document.querySelectorAll('.chip').forEach(function(c){ c.classList.remove('sel'); });
@@ -338,6 +346,7 @@ function timeNext(){
 }
 
 function yes(){
+  Snd.success();
   petals();
   fade(function(){
     const a=answers;
@@ -406,6 +415,67 @@ function petals(){
   }
 }
 
+/* =================== МУЗЫКА И ЗВУК (Web Audio, без файлов) =================== */
+const Snd = (function(){
+  let ctx=null, master=null, musicGain=null, fxGain=null;
+  let on=false, started=false, timer=null, next=0, idx=0;
+  const base=261.63; // C4
+  const CH=[[0,4,7,11],[-3,0,4,7],[-7,-3,0,4],[-5,-1,2,5]]; // Cmaj7 Am7 Fmaj7 G7
+  function f(s){ return base*Math.pow(2,s/12); }
+  function init(){
+    if(ctx) return true;
+    const AC=window.AudioContext||window.webkitAudioContext;
+    if(!AC) return false;
+    ctx=new AC();
+    master=ctx.createGain(); master.gain.value=0.9; master.connect(ctx.destination);
+    musicGain=ctx.createGain(); musicGain.gain.value=0; musicGain.connect(master);
+    fxGain=ctx.createGain(); fxGain.gain.value=0.9; fxGain.connect(master);
+    return true;
+  }
+  function voice(dest,freq,t,dur,type,peak){
+    const o=ctx.createOscillator(), g=ctx.createGain();
+    o.type=type; o.frequency.value=freq;
+    g.gain.setValueAtTime(0.0001,t);
+    g.gain.linearRampToValueAtTime(peak,t+0.05);
+    g.gain.exponentialRampToValueAtTime(0.0001,t+dur);
+    o.connect(g); g.connect(dest);
+    o.start(t); o.stop(t+dur+0.05);
+  }
+  function schedule(){
+    const dur=3.0;
+    while(next < ctx.currentTime+0.7){
+      const ch=CH[idx%CH.length];
+      ch.forEach(function(s){ voice(musicGain, f(s)/2, next, dur*0.98, 'sine', 0.05); });
+      const arp=ch.concat([ch[0]+12]);
+      arp.forEach(function(s,i){ voice(musicGain, f(s)*2, next+i*(dur/(arp.length+1)), 0.7, 'triangle', 0.05); });
+      next+=dur; idx++;
+    }
+  }
+  function ready(){ return on && init() && ctx.state!=='suspended'; }
+  function startMusic(){
+    if(!init()) return;
+    if(ctx.state==='suspended') ctx.resume();
+    if(!started){ started=true; next=ctx.currentTime+0.15; idx=0; schedule(); timer=setInterval(schedule,250); }
+    musicGain.gain.cancelScheduledValues(ctx.currentTime);
+    musicGain.gain.setTargetAtTime(0.5, ctx.currentTime, 0.6);
+  }
+  return {
+    isOn:function(){ return on; },
+    setOn:function(v){
+      on=v; if(!init()) return;
+      if(ctx.state==='suspended') ctx.resume();
+      if(v){ startMusic(); }
+      else if(musicGain){ musicGain.gain.cancelScheduledValues(ctx.currentTime); musicGain.gain.setTargetAtTime(0.0, ctx.currentTime, 0.3); }
+    },
+    pluck:function(){ if(!ready()) return; const t=ctx.currentTime; voice(fxGain,f(7),t,0.4,'triangle',0.12); voice(fxGain,f(11),t+0.02,0.5,'sine',0.07); },
+    tick:function(){ if(!ready()) return; const t=ctx.currentTime; voice(fxGain,f(12),t,0.18,'triangle',0.09); },
+    swell:function(){ if(!ready()) return; const t=ctx.currentTime; [0,4,7,12].forEach(function(s,i){ voice(fxGain,f(s),t+i*0.09,1.3,'sine',0.1); }); },
+    success:function(){ if(!ready()) return; const t=ctx.currentTime; [0,4,7,12,16,19].forEach(function(s,i){ voice(fxGain,f(s),t+i*0.1,0.85,'triangle',0.13); }); [0,4,7].forEach(function(s){ voice(fxGain,f(s)/2,t,1.8,'sine',0.07); }); }
+  };
+})();
+function updateSndBtn(){ const b=document.getElementById('sndBtn'); if(!b) return; const o=Snd.isOn(); b.textContent=o?'♪':'\u{1F507}'; b.title=o?'Музыка включена':'Музыка выключена'; b.classList.remove('pulse'); }
+function toggleSound(){ Snd.setOn(!Snd.isOn()); updateSndBtn(); }
+
 /* Делегирование событий — работает в песочнице артефактов */
 document.addEventListener('click', function(e){
   const opt = e.target.closest('[data-choose]');
@@ -413,6 +483,7 @@ document.addEventListener('click', function(e){
   const act = e.target.closest('[data-action]');
   if(!act) return;
   const a = act.getAttribute('data-action');
+  if(a==='sound'){ toggleSound(); return; }
   if(a==='start') start();
   else if(a==='yes') yes();
   else if(a==='dodge') dodge();
